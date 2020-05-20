@@ -1,6 +1,3 @@
-# fixme: should be defined in base system side
-%define python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")
-
 Name:       python3-toml
 Summary:    TOML library (ini-like config parser) for Python 3
 Version:    0.10.0
@@ -23,15 +20,17 @@ https://en.wikipedia.org/wiki/TOML
 %autosetup -n %{name}-%{version}/upstream
 
 %build
-%{__python3} setup.py build
+%py3_build
 
 %install
 rm -rf %{buildroot}
-%{__python3} setup.py install --skip-build --root %{buildroot}
-find %{buildroot}
+%py3_install
+
 
 %files
 %license LICENSE
 %doc README.rst examples
-%{python3_sitearch}/*
+# This is a pure python module so only sitelib files
+%{python3_sitelib}/toml
+%{python3_sitelib}/toml-*.egg-info
 
